@@ -97,6 +97,22 @@ td input,td select{width:100%}
 </div>
 
 <div class="polaroid">
+<h2>Publication automatique sur GitHub</h2>
+<p class="hint">À chaque résultat saisi, tournoi.json est remplacé dans ton dépôt. Le jeton reste uniquement dans ce navigateur et n’est jamais écrit dans le code ni dans le fichier exporté.</p>
+<div class="row">
+<input id="ghO" placeholder="Utilisateur GitHub" aria-label="Utilisateur GitHub">
+<input id="ghR" placeholder="Nom du dépôt" aria-label="Nom du dépôt">
+<input id="ghB" placeholder="Branche (main)" aria-label="Branche">
+</div>
+<div class="row">
+<input id="ghT" type="password" placeholder="Jeton d’accès (fine-grained)" aria-label="Jeton d’accès" style="min-width:260px">
+<label><input type="checkbox" id="ghA"> Publier automatiquement</label>
+<button class="b alt" onclick="ghSave();publish(true)">Enregistrer et publier maintenant</button>
+</div>
+<p class="hint" id="ghs">Publication désactivée.</p>
+</div>
+
+<div class="polaroid">
 <h2>QR code joueurs</h2>
 <div id="qr"></div>
 <p class="hint" id="qrurl"></p>
@@ -119,14 +135,14 @@ td input,td select{width:100%}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 const LV=['Débutant','Intermédiaire','Confirmé'];
-const PIN='poolnight';                 // code organisateur (laisser vide = aucun)
+const PIN='';                 // code organisateur (laisser vide = aucun)
 const HELLOASSO_ENDPOINT='';  // URL de ton petit serveur renvoyant [{prenom,nom,niveau}]
 const $=id=>document.getElementById(id);
 const norm=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
 const rank=l=>{const i=LV.findIndex(x=>norm(x).slice(0,3)===norm(l).slice(0,3));return i<0?0:i};
 let S={players:[],brackets:null,mode:'level'};
 try{const x=JSON.parse(localStorage.getItem('poolnight'));if(x)S=x}catch(e){}
-const save=()=>{try{localStorage.setItem('poolnight',JSON.stringify(S))}catch(e){}};
+const save=()=>{try{localStorage.setItem('poolnight',JSON.stringify(S))}catch(e){}clearTimeout(ghTimer);ghTimer=setTimeout(()=>publish(),1500)};
 const pl=id=>S.players.find(p=>p.id===id);
 const uid=()=>Math.random().toString(36).slice(2,9);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -257,6 +273,34 @@ function findMe(){
  const n=out.querySelector('.now');if(n)n.scrollIntoView({block:'center',inline:'center'});
 }
 
+
+/* ---------- publication GitHub ---------- */
+let GH={owner:'',repo:'',branch:'main',token:'',auto:false},ghTimer,ghBusy=false,ghDirty=false;
+try{Object.assign(GH,JSON.parse(localStorage.getItem('poolnight_gh')))}catch(e){}
+const ghStatus=t=>{$('ghs').textContent=t};
+function ghFill(){$('ghO').value=GH.owner;$('ghR').value=GH.repo;$('ghB').value=GH.branch;$('ghT').value=GH.token;$('ghA').checked=GH.auto;ghStatus(GH.auto?'Publication automatique activée.':'Publication désactivée.')}
+function ghSave(){
+ GH={owner:$('ghO').value.trim(),repo:$('ghR').value.trim(),branch:$('ghB').value.trim()||'main',token:$('ghT').value.trim(),auto:$('ghA').checked};
+ try{localStorage.setItem('poolnight_gh',JSON.stringify(GH))}catch(e){}
+}
+async function publish(force){
+ if(!force&&!GH.auto)return;
+ if(!GH.token||!GH.owner||!GH.repo)return force&&ghStatus('Renseigne utilisateur, dépôt et jeton.');
+ if(!S.brackets)return force&&ghStatus('Génère d’abord un tableau.');
+ if(ghBusy){ghDirty=true;return}
+ ghBusy=true;ghStatus('Publication en cours…');
+ const url=`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/tournoi.json`;
+ const h={Authorization:'Bearer '+GH.token,Accept:'application/vnd.github+json'};
+ try{
+  const g=await fetch(url+'?ref='+encodeURIComponent(GH.branch),{headers:h,cache:'no-store'});
+  const body={message:'Mise à jour du tournoi',branch:GH.branch,content:btoa(unescape(encodeURIComponent(JSON.stringify(S))))};
+  if(g.ok)body.sha=(await g.json()).sha;
+  const r=await fetch(url,{method:'PUT',headers:h,body:JSON.stringify(body)});
+  if(!r.ok)throw new Error('code '+r.status);
+  ghStatus('Publié à '+new Date().toLocaleTimeString('fr-FR')+'. Visible par les joueurs d’ici 1 à 2 minutes.');
+ }catch(e){ghStatus('Échec de la publication ('+e.message+'). Vérifie le jeton, le dépôt et la branche.')}
+ ghBusy=false;if(ghDirty){ghDirty=false;publish()}
+}
 /* ---------- divers ---------- */
 function exportJson(){
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));
@@ -280,7 +324,7 @@ function qr(){
   try{const r=await fetch('tournoi.json?'+Date.now());if(r.ok)S=await r.json()}catch(e){}
   document.querySelector('nav').classList.add('hide');go('pl');
  }
- renderP();qr();
+ renderP();qr();ghFill();
 })();
 </script>
 </body>
