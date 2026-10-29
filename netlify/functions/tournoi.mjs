@@ -1,4 +1,14 @@
 import { getStore } from "@netlify/blobs";
+import { timingSafeEqual } from "node:crypto";
+
+const same = (a, b) => {
+  const x = Buffer.from(a || ""), y = Buffer.from(b || "");
+  return x.length === y.length && timingSafeEqual(x, y);
+};
+const authorized = (req) => {
+  const key = Netlify.env.get("ORGANIZER_KEY");
+  return !!key && same(req.headers.get("x-organizer-key"), key);
+};
 
 export default async (req) => {
   const store = getStore({ name: "poolnight", consistency: "strong" });
@@ -9,11 +19,15 @@ export default async (req) => {
     return new Response(data || "null", { headers });
   }
 
+  // POST = vérifier la clé organisateur (ne renvoie jamais la clé)
+  if (req.method === "POST") {
+    return authorized(req)
+      ? new Response("ok", { headers })
+      : new Response("forbidden", { status: 403 });
+  }
+
   if (req.method === "PUT") {
-    const key = Netlify.env.get("ORGANIZER_KEY");
-    if (!key || req.headers.get("x-organizer-key") !== key) {
-      return new Response("forbidden", { status: 403 });
-    }
+    if (!authorized(req)) return new Response("forbidden", { status: 403 });
     const body = await req.text();
     if (body.length > 500000) return new Response("too large", { status: 413 });
     try { JSON.parse(body); } catch { return new Response("bad json", { status: 400 }); }

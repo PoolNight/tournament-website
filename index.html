@@ -81,7 +81,7 @@ td input,td select{width:100%}
 <button id="tP" onclick="go('pl')">Joueur</button>
 </nav>
 <main>
-<section id="vO" class="org">
+<section id="vO" class="org hide">
 <div class="polaroid">
 <h2>Participants</h2>
 <p class="hint">Sur HelloAsso : Mon espace › Billetterie › Exporter les participants (CSV). Colle le contenu ci-dessous ou charge le fichier. Colonnes lues : prénom, nom, niveau.</p>
@@ -159,7 +159,6 @@ td input,td select{width:100%}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 const LV=['Débutant','Intermédiaire','Confirmé'];
-const PIN='poolnight-event-JPLA';                 // code organisateur (laisser vide = aucun)
 const HELLOASSO_ENDPOINT='';  // URL de ton petit serveur renvoyant [{prenom,nom,niveau}]
 const $=id=>document.getElementById(id);
 const norm=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
@@ -434,10 +433,30 @@ function exportJson(){
  a.download='tournoi.json';a.click();
 }
 function resetAll(){if(confirm('Effacer participants et tableau ?')){S={players:[],brackets:null,mode:'level'};save();renderP()}}
-function go(v){
- if(v==='org'&&PIN&&prompt('Code organisateur')!==PIN)return;
+function show(v){
  $('vO').classList.toggle('hide',v!=='org');$('vP').classList.toggle('hide',v!=='pl');
  $('tO').classList.toggle('on',v==='org');$('tP').classList.toggle('on',v==='pl');
+}
+/* true = clé valide, false = refusée, null = serveur injoignable */
+async function verifyKey(k){
+ try{return (await fetch(API,{method:'POST',headers:{'x-organizer-key':k}})).ok}catch(e){return null}
+}
+async function go(v){
+ if(v==='org'){
+  let ok=GH.token?await verifyKey(GH.token):false;
+  if(ok===null)ok=true; /* hors ligne : on garde la clé déjà enregistrée */
+  if(!ok){
+   const k=(prompt('Code organisateur')||'').trim();
+   if(!k||(await verifyKey(k))!==true){
+    if(k)alert('Code refusé.');
+    if($('vO').classList.contains('hide')&&$('vP').classList.contains('hide'))show('pl');
+    return;
+   }
+   GH.token=k;try{localStorage.setItem('poolnight_gh',JSON.stringify(GH))}catch(e){}
+   ghFill();
+  }
+ }
+ show(v);
 }
 function qr(){
  const u=location.href.split('#')[0].split('?')[0];
