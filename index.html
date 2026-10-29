@@ -16,7 +16,7 @@ h1{font:400 clamp(2rem,6vw,3.2rem)/1 Anton,sans-serif;margin:0;letter-spacing:.0
 h1 b{color:var(--red);font-weight:400}
 h2{font:400 1.5rem Anton,sans-serif;margin:0 0 .8rem}
 nav{display:flex;gap:.5rem;justify-content:center;margin:.8rem 0 1.2rem}
-nav button{border:2px solid var(--ink);background:none;color:var(--ink);padding:.5rem 1.2rem;border-radius:99px;font:700 .95rem inherit;cursor:pointer}
+nav button{border:2px solid var(--ink);background:none;color:var(--ink);padding:.5rem 1.2rem;border-radius:99px;font-weight:700;font-size:.95rem;font-family:inherit;cursor:pointer}
 nav button.on{background:var(--ink);color:var(--bg)}
 main{max-width:1100px;margin:auto;padding:0 1rem 4rem}
 .polaroid{background:var(--card);padding:1.2rem;border-radius:3px;box-shadow:0 6px 18px #5a3d1a33;margin-bottom:1.6rem}
@@ -24,7 +24,7 @@ main{max-width:1100px;margin:auto;padding:0 1rem 4rem}
 .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.6rem 0}
 input,select,textarea{font:inherit;padding:.5rem .6rem;border:1.5px solid var(--ink);border-radius:6px;background:#fff;color:var(--ink);max-width:100%}
 textarea{width:100%;min-height:90px}
-button.b{background:var(--red);color:#fff;border:0;padding:.55rem 1rem;border-radius:6px;font:700 .95rem inherit;cursor:pointer}
+button.b{background:var(--red);color:#fff;border:0;padding:.55rem 1rem;border-radius:6px;font-weight:700;font-size:.95rem;font-family:inherit;cursor:pointer}
 button.b.alt{background:var(--ink)}button.b.ghost{background:none;color:var(--ink);border:1.5px solid var(--ink)}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 table{width:100%;border-collapse:collapse}td,th{padding:.3rem;text-align:left;border-bottom:1px solid var(--line)}
@@ -34,8 +34,19 @@ td input,td select{width:100%}
 .bname{font:400 1.25rem Anton,sans-serif;color:var(--red);margin:1rem 0 .4rem}
 .scroll{overflow-x:auto;padding-bottom:.6rem}
 .bracket{display:flex;gap:1.4rem;min-width:max-content}
-.round{display:flex;flex-direction:column;justify-content:space-around;gap:.6rem;min-width:190px}
-.round h4{margin:0;font:700 .8rem inherit;text-align:center;opacity:.7}
+.round{display:flex;flex-direction:column;min-width:190px}
+.ms{flex:1;display:flex;flex-direction:column}
+.slot{flex:1;display:flex;align-items:center;position:relative;padding:.3rem 0}
+.slot .match{width:100%;position:relative;z-index:1}
+.slot i{position:absolute;pointer-events:none}
+.slot i.d{right:100%;top:50%;width:.7rem;border-top:2px solid var(--ink)}
+.slot i.c{left:100%;width:1.4rem;top:0;bottom:0}
+.slot i.c::before{content:"";position:absolute;left:0;top:50%;width:.7rem;border-top:2px solid var(--ink)}
+.slot i.c.st::before{width:1.4rem}
+.slot i.c.dn::after,.slot i.c.up::after{content:"";position:absolute;left:.7rem;border-left:2px solid var(--ink)}
+.slot i.c.dn::after{top:50%;bottom:0}
+.slot i.c.up::after{top:0;bottom:50%}
+.round h4{margin:0 0 .4rem;font-weight:700;font-size:.8rem;font-family:inherit;text-align:center;opacity:.7}
 .match{background:#fff;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden}
 .pl{padding:.4rem .6rem;font-size:.9rem;display:flex;justify-content:space-between;gap:.4rem;min-height:2rem}
 .pl+.pl{border-top:1px solid var(--line)}
@@ -50,6 +61,13 @@ td input,td select{width:100%}
 @media(prefers-reduced-motion:reduce){.match.now{animation:none}}
 .status{font:400 1.3rem Anton,sans-serif;margin:.6rem 0}
 #qr{background:#fff;padding:10px;display:inline-block;border-radius:6px}
+.sname{font-weight:700;font-size:.9rem;margin:1rem 0 .3rem;opacity:.8}
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:.4rem 0 1rem}
+.grp{background:#fff;border:1.5px solid var(--ink);border-radius:8px;padding:.7rem}
+.grp h3{font:400 1.1rem Anton,sans-serif;margin:0 0 .4rem}
+.grp td{font-size:.85rem;padding:.2rem}.grp .q td{font-weight:700}
+.grp tr.mine td{background:var(--red);color:#fff}
+.gm{display:grid;gap:.5rem;margin-top:.6rem}
 .hide{display:none}
 </style>
 </head>
@@ -84,6 +102,17 @@ td input,td select{width:100%}
 <div class="polaroid">
 <h2>Tournoi</h2>
 <div class="row">
+<select id="fmt" onchange="S.format=this.value;save();fmtUI()" aria-label="Format du tournoi">
+<option value="se">Élimination directe</option>
+<option value="de">Double élimination</option>
+<option value="po">Poules puis phase finale</option>
+</select>
+<span id="poOpts" class="row hide" style="margin:0">
+<select id="psz" onchange="S.size=+this.value;save()" aria-label="Joueurs par poule"><option value="3">Poules de 3</option><option value="4">Poules de 4</option><option value="5">Poules de 5</option></select>
+<select id="pq" onchange="S.q=+this.value;save()" aria-label="Qualifiés par poule"><option value="1">1 qualifié par poule</option><option value="2">2 qualifiés par poule</option><option value="3">3 qualifiés par poule</option></select>
+</span>
+</div>
+<div class="row">
 <select id="mode" onchange="S.mode=this.value;save()">
 <option value="level">Un tableau par niveau</option>
 <option value="all">Un tableau unique (têtes de série par niveau)</option>
@@ -92,7 +121,7 @@ td input,td select{width:100%}
 <button class="b ghost" onclick="exportJson()">Exporter tournoi.json</button>
 <button class="b ghost" onclick="resetAll()">Tout effacer</button>
 </div>
-<p class="hint">Clique sur un joueur pour le déclarer vainqueur : il passe automatiquement au tour suivant. Re-clique pour annuler.</p>
+<p class="hint">Clique sur un joueur pour le déclarer vainqueur : il passe automatiquement au tour suivant. Re-clique pour annuler. En double élimination, le perdant passe automatiquement dans le tableau des repêchages. En poules, clique le vainqueur de chaque match : les qualifiés rejoignent la phase finale dès que la poule est terminée (égalité : confrontation directe, sinon ordre du tirage).</p>
 <div id="bO"></div>
 </div>
 
@@ -142,6 +171,7 @@ const norm=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCas
 const rank=l=>{const i=LV.findIndex(x=>norm(x).slice(0,3)===norm(l).slice(0,3));return i<0?0:i};
 let S={players:[],brackets:null,mode:'level'};
 try{const x=JSON.parse(localStorage.getItem('poolnight'));if(x)S=x}catch(e){}
+const clean=()=>{if(S.brackets&&S.brackets.some(b=>!b.secs))S.brackets=null};clean();
 const save=()=>{try{localStorage.setItem('poolnight',JSON.stringify(S))}catch(e){}clearTimeout(ghTimer);ghTimer=setTimeout(()=>publish(),1500)};
 const pl=id=>S.players.find(p=>p.id===id);
 const uid=()=>Math.random().toString(36).slice(2,9);
@@ -180,7 +210,7 @@ function renderP(){
  <td><select onchange="ed('${p.id}','l',this.value)" aria-label="Niveau">${opts(p.l)}</select></td>
  <td><button class="b ghost" onclick="del('${p.id}')">Supprimer</button></td></tr>`).join('')}</table><p class="hint">${ps.length} participant(s)</p>`
  :'<div class="empty">Aucun participant. Importe le CSV HelloAsso ou ajoute-les à la main.</div>';
- $('mode').value=S.mode;renderB();
+ $('mode').value=S.mode;$('fmt').value=S.format||'se';$('psz').value=S.size||4;$('pq').value=S.q||2;fmtUI();renderB();
 }
 function ed(id,k,v){const p=pl(id);p[k]=v.trim()||p[k];save();renderB()}
 function addP(){
@@ -188,91 +218,184 @@ function addP(){
  const x={id:uid(),p,n,l:$('nl').value};S.players.push(x);
  if(S.brackets){
   const b=S.brackets.find(b=>b.level===(S.mode==='level'?x.l:'all'));let ok=false;
-  if(b)for(const m of b.rounds[0]){if(m.a===null&&m.b!==null){m.a=x.id;ok=true;break}if(m.b===null&&m.a!==null){m.b=x.id;ok=true;break}}
-  if(ok)prop(b);else alert('Plus de place libre dans le tableau : régénère-le pour inclure ce joueur.');
+  if(b&&b.type!=='po')for(const m of b.secs[0].rounds[0]){
+   if(m.a==='-'&&m.b!=='-'){m.a=x.id;m.w=null;ok=true;break}
+   if(m.b==='-'&&m.a!=='-'){m.b=x.id;m.w=null;ok=true;break}
+  }
+  if(ok)prop(b);else alert('Impossible d’ajouter ce joueur au tableau en cours (aucune place libre, ou phase de poules déjà tirée). Régénère le tableau pour l’inclure.');
  }
  $('np').value=$('nn').value='';save();renderP();
 }
 function del(id){
  if(!confirm('Supprimer ce participant ?'))return;
  S.players=S.players.filter(p=>p.id!==id);
- (S.brackets||[]).forEach(b=>{b.rounds[0].forEach(m=>{if(m.a===id)m.a=null;if(m.b===id)m.b=null;if(m.w===id)m.w=null});prop(b)});
+ (S.brackets||[]).forEach(b=>{
+  if(b.type==='po')b.groups.forEach(g=>{g.ps=g.ps.filter(x=>x!==id);g.ms=g.ms.filter(m=>m.a!==id&&m.b!==id)});
+  else b.secs[0].rounds[0].forEach(m=>{if(m.a===id)m.a='-';if(m.b===id)m.b='-'});
+  prop(b)});
  save();renderP();
 }
 
 /* ---------- tableau ---------- */
+const FMT={se:'Élimination directe',de:'Double élimination',po:'Poules et phase finale'};
+const REG=[];
+const mk=(a,b)=>({a:a,b:b,w:null});
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const sortSeed=ps=>shuffle(ps).sort((a,b)=>rank(b.l)-rank(a.l));
 function seedOrder(n){let o=[1];while(o.length<n){const m=o.length*2+1;o=o.flatMap(x=>[x,m-x])}return o}
-function build(list,name,level){
- const s=[...list].sort(()=>Math.random()-.5).sort((a,b)=>rank(b.l)-rank(a.l));
- let size=2;while(size<s.length)size*=2;
- const slots=seedOrder(size).map(k=>s[k-1]?s[k-1].id:null);
- const rounds=[];let n=size/2;
- while(n>=1){rounds.push(Array.from({length:n},()=>({a:null,b:null,w:null})));n/=2}
- rounds[0].forEach((m,i)=>{m.a=slots[2*i];m.b=slots[2*i+1]});
- const b={name,level,rounds};prop(b);return b;
+function seeded(list){let N=2;while(N<list.length)N*=2;return seedOrder(N).map(k=>k<=list.length?list[k-1]:'-')}
+const rname=(r,t)=>t-r===1?'Finale':t-r===2?'Demi-finales':t-r===3?'Quarts de finale':t-r===4?'8es de finale':'Tour '+(r+1);
+/* '-' = place vide définitive (exempt), null = en attente */
+function fix(m){
+ const a=m.a,b=m.b;
+ if(a==='-'&&b==='-')m.w='-';
+ else if(a==='-')m.w=b;
+ else if(b==='-')m.w=a;
+ else if(a===null||b===null)m.w=null;
+ else if(m.w!==null&&m.w!==a&&m.w!==b)m.w=null;
 }
-function prop(b){
- const R=b.rounds;
- R[0].forEach(m=>{
-  if(m.a===null&&m.b!==null)m.w=m.b;else if(m.b===null&&m.a!==null)m.w=m.a;
-  else if(m.w!==null&&m.w!==m.a&&m.w!==m.b)m.w=null;
-  if(m.a===null&&m.b===null)m.w=null;
- });
- for(let r=1;r<R.length;r++)R[r].forEach((m,i)=>{
-  m.a=R[r-1][2*i].w;m.b=R[r-1][2*i+1].w;
-  if(m.w!==null&&m.w!==m.a&&m.w!==m.b)m.w=null;
- });
+function set(m,a,b){if(m.a!==a||m.b!==b)m.w=null;m.a=a;m.b=b;fix(m)}
+const lose=m=>m.w===null||m.a===null||m.b===null?null:(m.a==='-'||m.b==='-'?'-':m.w===m.a?m.b:m.a);
+function ko(slots,isRef){
+ const t=Math.log2(slots.length),rounds=[];let n=slots.length/2;
+ while(n>=1){rounds.push(Array.from({length:n},()=>mk(null,null)));n/=2}
+ if(!isRef)rounds[0].forEach((m,i)=>{m.a=slots[2*i];m.b=slots[2*i+1]});
+ return {t:'',rounds,titles:rounds.map((_,r)=>rname(r,t)),refs:isRef?slots:null};
+}
+function stand(g){
+ const W={};g.ps.forEach(id=>W[id]=0);g.ms.forEach(m=>{if(m.w)W[m.w]++});
+ const h=(a,b)=>{const m=g.ms.find(m=>(m.a===a&&m.b===b)||(m.a===b&&m.b===a));return m&&m.w===a?-1:m&&m.w===b?1:0};
+ const ids=[...g.ps].sort((a,b)=>W[b]-W[a]||h(a,b)||g.ps.indexOf(a)-g.ps.indexOf(b));
+ return {rows:ids.map(id=>({id,v:W[id],d:g.ms.filter(m=>m.w&&(m.a===id||m.b===id)&&m.w!==id).length})),done:g.ms.every(m=>m.w)};
+}
+function res(b,ref){
+ if(ref==='-')return '-';
+ const s=stand(b.groups[ref.g]);
+ return s.done?(s.rows[ref.pos]?s.rows[ref.pos].id:'-'):null;
+}
+function koProp(s,b){
+ const R=s.rounds;
+ R[0].forEach((m,i)=>s.refs?set(m,res(b,s.refs[2*i]),res(b,s.refs[2*i+1])):set(m,m.a,m.b));
+ for(let r=1;r<R.length;r++)R[r].forEach((m,i)=>set(m,R[r-1][2*i].w,R[r-1][2*i+1].w));
+}
+function deProp(b){
+ const [W,L,F]=b.secs,Wr=W.rounds,lr=L.rounds;
+ koProp(W,b);
+ lr.forEach((R,j)=>{const d=L.desc[j];R.forEach((m,i)=>{
+  if(j===0)set(m,lose(Wr[0][2*i]),lose(Wr[0][2*i+1]));
+  else if(d.t==='pair')set(m,lr[j-1][2*i].w,lr[j-1][2*i+1].w);
+  else set(m,lr[j-1][i].w,lose(Wr[d.r][Wr[d.r].length-1-i]));
+ })});
+ const gf=F.rounds[0][0],rs=F.rounds[1][0];
+ set(gf,Wr[Wr.length-1][0].w,lr[lr.length-1][0].w);
+ const lb=gf.w!==null&&gf.w===gf.b;
+ set(rs,lb?gf.a:null,lb?gf.b:null);
+}
+const prop=b=>b.type==='de'?deProp(b):koProp(b.secs[0],b);
+function chmp(b){
+ if(b.type==='de'){const [gf,rs]=b.secs[2].rounds.map(r=>r[0]);return gf.w===null?null:gf.w===gf.a?gf.w:rs.w}
+ const R=b.secs[0].rounds;return R[R.length-1][0].w;
+}
+function buildSE(ps,name,level){
+ const b={type:'se',name,level,secs:[ko(seeded(sortSeed(ps).map(p=>p.id)))]};prop(b);return b;
+}
+function buildDE(ps,name,level){
+ if(ps.length<3)return buildSE(ps,name,level);
+ const W=ko(seeded(sortSeed(ps).map(p=>p.id))),Wr=W.rounds,k=Wr.length;
+ const desc=[{t:'pair',r:0}];
+ for(let r=1;r<k;r++){desc.push({t:'drop',r});if(r<k-1)desc.push({t:'pair',r})}
+ let c=Wr[0].length/2;
+ const lr=desc.map((d,j)=>{if(j>0)c=d.t==='drop'?Wr[d.r].length:c/2;return Array.from({length:c},()=>mk(null,null))});
+ W.t='Tableau des gagnants';W.titles[k-1]='Finale des gagnants';
+ const L={t:'Tableau des repêchages',rounds:lr,desc,titles:desc.map((_,j)=>j===desc.length-1?'Finale des repêchages':'Repêchage '+(j+1)),refs:null};
+ const F={t:'Finale',rounds:[[mk(null,null)],[mk(null,null)]],titles:['Grande finale','Finale de reset (si besoin)'],refs:null};
+ const b={type:'de',name,level,secs:[W,L,F]};prop(b);return b;
+}
+function buildPO(ps,name,level,size,q){
+ if(ps.length<3)return buildSE(ps,name,level);
+ const s=sortSeed(ps),G=Math.max(1,Math.ceil(s.length/size));
+ const groups=Array.from({length:G},()=>({ps:[],ms:[]}));
+ s.forEach((p,i)=>{const row=Math.floor(i/G);groups[row%2?G-1-i%G:i%G].ps.push(p.id)});
+ groups.forEach(g=>{for(let i=0;i<g.ps.length;i++)for(let j=i+1;j<g.ps.length;j++)g.ms.push(mk(g.ps[i],g.ps[j]))});
+ let qq=Math.max(1,Math.min(q,Math.min(...groups.map(g=>g.ps.length))-1));
+ if(G*qq<2)qq=2;
+ const refs=[];for(let pos=0;pos<qq;pos++)for(let g=0;g<G;g++)refs.push({g,pos});
+ const K=ko(seeded(refs),true);K.t='Phase finale';
+ const b={type:'po',name,level,q:qq,groups,secs:[K]};prop(b);return b;
 }
 function gen(){
  if(S.players.length<2)return alert('Il faut au moins 2 participants.');
  if(S.brackets&&!confirm('Régénérer efface tous les résultats. Continuer ?'))return;
+ const f=S.format||'se',bld=(ps,n,l)=>f==='de'?buildDE(ps,n,l):f==='po'?buildPO(ps,n,l,S.size||4,S.q||2):buildSE(ps,n,l);
  if(S.mode==='level'){
-  S.brackets=LV.map(l=>({l,ps:S.players.filter(p=>p.l===l)})).filter(g=>g.ps.length>1).map(g=>build(g.ps,g.l,g.l));
+  S.brackets=LV.map(l=>({l,ps:S.players.filter(p=>p.l===l)})).filter(g=>g.ps.length>1).map(g=>bld(g.ps,g.l,g.l));
   const alone=LV.filter(l=>S.players.filter(p=>p.l===l).length===1);
   if(alone.length)alert('Un seul inscrit au niveau : '+alone.join(', ')+'. Pas de tableau pour eux ; passe en tableau unique ou change leur niveau.');
- }else S.brackets=[build(S.players,'Tableau principal','all')];
+ }else S.brackets=[bld(S.players,'Tableau principal','all')];
  save();renderB();
 }
-function setW(bi,r,i,id){
- if(!id)return;const b=S.brackets[bi],m=b.rounds[r][i];
- if(m.a===null||m.b===null)return;
- m.w=m.w===id?null:id;prop(b);save();renderB();
+function pick(k,id){
+ const r=REG[k];if(!r||!pl(r.m.a)||!pl(r.m.b))return;
+ r.m.w=r.m.w===id?null:id;prop(r.b);save();renderB();
 }
-const rname=(r,t)=>t-r===1?'Finale':t-r===2?'Demi-finales':t-r===3?'Quarts de finale':'Tour '+(r+1);
-function bracketHtml(b,bi,me,edit){
- const t=b.rounds.length;
- return `<div class="bname">${esc(b.name)}</div><div class="scroll"><div class="bracket">${b.rounds.map((R,r)=>`<div class="round"><h4>${rname(r,t)}</h4>${R.map((m,i)=>{
-  const path=me&&(m.a===me||m.b===me),now=path&&m.w===null&&m.a&&m.b;
-  const row=id=>{const p=pl(id);
-   if(!p)return `<div class="pl bye">${r===0?'exempt':'à déterminer'}</div>`;
-   const c=['pl',m.w===id?'win':'',m.w&&m.w!==id?'lose':'',id===me?'me':''].join(' ');
-   return `<div class="${c}"${edit?` onclick="setW(${bi},${r},${i},'${id}')"`:''}>${esc(p.p)} ${esc(p.n)}<small>${esc(p.l.slice(0,3))}</small></div>`};
-  return `<div class="match${path?' path':''}${now?' now':''}">${row(m.a)}${row(m.b)}</div>`}).join('')}</div>`).join('')}</div></div>`;
+function mHtml(m,b,me,edit){
+ const k=REG.push({m,b})-1,ok=pl(m.a)&&pl(m.b),path=me&&(m.a===me||m.b===me),now=path&&m.w===null&&ok;
+ const row=id=>{const p=pl(id);
+  if(!p)return `<div class="pl bye">${id==='-'?'exempt':'à déterminer'}</div>`;
+  const c=['pl',m.w===id?'win':'',m.w&&m.w!==id?'lose':'',id===me?'me':''].join(' ');
+  return `<div class="${c}"${edit&&ok?` onclick="pick(${k},'${id}')"`:''}>${esc(p.p)} ${esc(p.n)}<small>${esc(p.l.slice(0,3))}</small></div>`};
+ return `<div class="match${path?' path':''}${now?' now':''}">${row(m.a)}${row(m.b)}</div>`;
+}
+function cols(s,b,me,edit){
+ return `<div class="scroll"><div class="bracket">${s.rounds.map((R,r)=>{
+  const nx=s.rounds[r+1],pair=nx&&nx.length*2===R.length,st=nx&&nx.length===R.length,pv=r>0&&s.rounds[r-1].length===R.length*2;
+  return `<div class="round"><h4>${s.titles[r]}</h4><div class="ms">${R.map((m,i)=>`<div class="slot">${pv?'<i class="d"></i>':''}${mHtml(m,b,me,edit)}${pair?`<i class="c ${i%2?'up':'dn'}"></i>`:st?'<i class="c st"></i>':''}</div>`).join('')}</div></div>`}).join('')}</div></div>`;
+}
+function bHtml(b,me,edit){
+ let h=`<div class="bname">${esc(b.name)}</div>`;
+ if(b.type==='po')h+=`<div class="sname">Phase de poules</div><div class="groups">${b.groups.map((g,gi)=>{const st=stand(g);
+  return `<div class="grp"><h3>Poule ${String.fromCharCode(65+gi)}</h3><table>${st.rows.map((r,i)=>{const p=pl(r.id);
+   return `<tr class="${i<b.q&&st.done?'q':''}${r.id===me?' mine':''}"><td>${i+1}</td><td>${p?esc(p.p+' '+p.n):''}</td><td>${r.v} V</td><td>${r.d} D</td></tr>`}).join('')}</table><div class="gm">${g.ms.map(m=>mHtml(m,b,me,edit)).join('')}</div></div>`}).join('')}</div>`;
+ return h+b.secs.map(s=>(s.t?`<div class="sname">${s.t}</div>`:'')+cols(s,b,me,edit)).join('');
 }
 function renderB(){
- $('bO').innerHTML=S.brackets&&S.brackets.length?S.brackets.map((b,i)=>bracketHtml(b,i,null,true)).join(''):'<div class="empty">Pas encore de tableau. Ajoute des participants puis clique sur « Générer le tableau ».</div>';
+ REG.length=0;
+ $('bO').innerHTML=S.brackets&&S.brackets.length?S.brackets.map(b=>bHtml(b,null,true)).join(''):'<div class="empty">Pas encore de tableau. Ajoute des participants puis clique sur « Générer le tableau ».</div>';
 }
+function fmtUI(){$('poOpts').classList.toggle('hide',(S.format||'se')!=='po')}
 
 /* ---------- joueur ---------- */
+function status(b,me){
+ if(chmp(b)===me)return 'Tu as gagné le tournoi !';
+ let pre='';
+ if(b.type==='po'){
+  const gi=b.groups.findIndex(g=>g.ps.includes(me)),g=b.groups[gi],st=stand(g),pos=st.rows.findIndex(r=>r.id===me)+1,L='Poule '+String.fromCharCode(65+gi);
+  if(!st.done){
+   const open=g.ms.filter(m=>m.w===null&&(m.a===me||m.b===me)).map(m=>{const o=pl(m.a===me?m.b:m.a);return o.p+' '+o.n});
+   return `${L} : ${pos}e pour l’instant. Il te reste à jouer contre ${open.join(', ')}.`;
+  }
+  if(pos>b.q)return `Éliminé·e en ${L.toLowerCase()} (${pos}e). Merci d’avoir joué !`;
+  pre=`Qualifié·e (${pos}e de la ${L.toLowerCase()}). `;
+ }
+ let last=null;
+ b.secs.forEach(s=>s.rounds.forEach((R,r)=>R.forEach(m=>{if(m.a===me||m.b===me)last={m,l:(s.t?s.t+' · ':'')+s.titles[r]}})));
+ if(!last)return 'Ton tableau n’a pas encore commencé.';
+ const {m,l}=last;
+ if(m.w===null){const o=pl(m.a===me?m.b:m.a);return pre+(o?`${l} : ton adversaire est ${o.p} ${o.n}.`:`${l} : adversaire pas encore connu.`)}
+ if(m.w===me)return pre+'Tu avances ! Adversaire pas encore connu.';
+ return `Éliminé·e (${l}). Merci d’avoir joué !`;
+}
 function findMe(){
  const q=norm($('jp').value+' '+$('jn').value).split(/\s+/).filter(Boolean).sort().join(' ');
  const p=S.players.find(p=>norm(p.p+' '+p.n).split(/\s+/).filter(Boolean).sort().join(' ')===q);
  const out=$('me');
  if(!S.brackets||!S.brackets.length){out.innerHTML='<div class="empty">Le tournoi n’est pas encore publié. Reviens un peu plus tard.</div>';return}
  if(!p){out.innerHTML='<div class="empty">Aucun inscrit à ce nom. Vérifie l’orthographe du prénom et du nom saisis sur HelloAsso.</div>';return}
- const bi=S.brackets.findIndex(b=>b.rounds[0].some(m=>m.a===p.id||m.b===p.id));
- if(bi<0){out.innerHTML='<div class="empty">Tu es inscrit·e mais pas dans un tableau. Vois avec l’organisateur.</div>';return}
- const b=S.brackets[bi],t=b.rounds.length;let msg='',last=null;
- b.rounds.forEach((R,r)=>R.forEach(m=>{if(m.a===p.id||m.b===p.id)last={r,m}}));
- const {r,m}=last,opp=pl(m.a===p.id?m.b:m.a);
- if(m.w===p.id)msg=r===t-1?'Tu as gagné le tournoi !':`Qualifié·e pour : ${rname(r+1,t)}`;
- else if(m.w)msg=`Éliminé·e en ${rname(r,t).toLowerCase()}. Merci d’avoir joué !`;
- else if(opp)msg=`${rname(r,t)} : ton adversaire est ${opp.p} ${opp.n}`;
- else msg=`${rname(r,t)} : adversaire pas encore connu`;
- out.innerHTML=`<div class="status">${esc(msg)}</div><p class="hint">${esc(p.p)} ${esc(p.n)} · niveau ${esc(p.l)}. Ton chemin est entouré en rouge.</p>`+bracketHtml(b,bi,p.id,false);
+ const b=S.brackets.find(b=>b.type==='po'?b.groups.some(g=>g.ps.includes(p.id)):b.secs[0].rounds[0].some(m=>m.a===p.id||m.b===p.id));
+ if(!b){out.innerHTML='<div class="empty">Tu es inscrit·e mais pas dans un tableau. Vois avec l’organisateur.</div>';return}
+ out.innerHTML=`<div class="status">${esc(status(b,p.id))}</div><p class="hint">${esc(p.p)} ${esc(p.n)} · niveau ${esc(p.l)}. Ton chemin est entouré en rouge.</p>`+bHtml(b,p.id,false);
  const n=out.querySelector('.now');if(n)n.scrollIntoView({block:'center',inline:'center'});
 }
-
 
 /* ---------- publication GitHub ---------- */
 let GH={owner:'',repo:'',branch:'main',token:'',auto:false},ghTimer,ghBusy=false,ghDirty=false;
@@ -321,7 +444,7 @@ function qr(){
  const orga=new URLSearchParams(location.search).get('vue')==='orga';
  if(orga)go('org');
  else{
-  try{const r=await fetch('tournoi.json?'+Date.now());if(r.ok)S=await r.json()}catch(e){}
+  try{const r=await fetch('tournoi.json?'+Date.now());if(r.ok){S=await r.json();clean()}}catch(e){}
   document.querySelector('nav').classList.add('hide');go('pl');
  }
  renderP();qr();ghFill();
