@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PoolNight – Club de billard d'EPITA</title>
+<meta name="description" content="PoolNight, club de billard d'EPITA : soirées, tournois et carte de membre.">
+<link rel="icon" href="assets/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3e0c4;--red:#c0281f;--dark:#8f1d16;--ink:#2f3a32;--card:#f6f3ec;--line:#d9c4a1;--gold:#a8742c}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.22;mix-blend-mode:multiply;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.hero{position:relative;text-align:center;padding:1.6rem 1rem 1.4rem;overflow:hidden;border-bottom:4px double var(--ink);background:repeating-conic-gradient(from -90deg at 50% 55%,#c0281f14 0 5deg,#0000 5deg 10deg)}
+.top{display:inline-block;font:400 .95rem Anton,sans-serif;letter-spacing:.35em;text-transform:uppercase;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:.2rem 1rem}
+.logo{display:block;width:132px;height:132px;margin:1rem auto .6rem;border-radius:50%;box-shadow:0 0 0 4px var(--bg),0 0 0 7px var(--ink)}
+h1{margin:0;font:400 clamp(3rem,13vw,7rem)/.95 "Abril Fatface",serif;color:var(--red);letter-spacing:.01em;text-shadow:3px 3px 0 var(--ink)}
+h1 span{color:var(--ink);text-shadow:3px 3px 0 var(--red)}
+.sub{font:400 1.2rem Anton,sans-serif;letter-spacing:.2em;text-transform:uppercase;margin:.8rem 0 .2rem}
+.slogan{font:italic 1.15rem "DM Sans",serif;margin:0}
+.rwst{display:flex;align-items:center;justify-content:center;gap:.6rem}
+.rwst .rib{min-width:0;font-size:clamp(1.15rem,4.6vw,1.6rem)}
+.stamp{flex:none;width:clamp(64px,18vw,92px);aspect-ratio:1;border:5px double var(--red);border-radius:50%;color:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font:400 clamp(.55rem,2.3vw,.8rem)/1.1 Anton,sans-serif;letter-spacing:.08em;text-transform:uppercase;transform:rotate(14deg);background:#f3e0c4cc}
+.stamp b{display:block;font:400 1.9em Anton,sans-serif}
+nav{position:sticky;top:0;z-index:20;background:var(--ink);display:flex;justify-content:center;flex-wrap:wrap;border-bottom:3px solid var(--red)}
+nav a{color:var(--bg);text-decoration:none;font:400 1rem Anton,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:.8rem 1.1rem;border-bottom:4px solid transparent;margin-bottom:-3px}
+nav a:hover{background:#ffffff14}
+nav a[aria-current]{border-bottom-color:var(--bg);color:#fff}
+nav a.ext::after{content:" \2197"}
+main{max-width:1000px;margin:auto;padding:2rem 1rem 3rem}
+.rw{text-align:center;margin:2.2rem 0 1.4rem}
+.rw:first-child{margin-top:0}
+.rib{display:inline-block;position:relative;z-index:0;margin:0 1rem;padding:.35rem 1.6rem;background:var(--red);color:var(--card);font:400 1.6rem Anton,sans-serif;letter-spacing:.07em;text-transform:uppercase}
+.rib::before,.rib::after{content:"";position:absolute;z-index:-1;top:.55rem;width:1.4rem;height:100%;background:var(--dark)}
+.rib::before{left:-1rem;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,.7rem 50%)}
+.rib::after{right:-1rem;clip-path:polygon(0 0,100% 0,calc(100% - .7rem) 50%,100% 100%,0 100%)}
+.frame{border:3px solid var(--ink);outline:1px solid var(--ink);outline-offset:-10px;padding:1.6rem;background:#f8ecd6}
+.grid{display:grid;gap:1.6rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:center}
+.lead{font:400 1.55rem/1.25 "Abril Fatface",serif;margin:0 0 .6rem;color:var(--red)}
+.infos{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:.5rem}
+.infos li{border-left:4px solid var(--red);padding-left:.8rem}
+.infos b{font:400 .95rem Anton,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.btn{display:inline-block;background:var(--red);color:var(--card);text-decoration:none;font:400 1.05rem Anton,sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:.7rem 1.4rem;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn.alt{background:var(--ink)}
+.btns{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:1.1rem}
+.polaroid{background:var(--card);padding:.8rem .8rem 1rem;box-shadow:0 6px 18px #5a3d1a40;margin:0}
+.polaroid.tilt{transform:rotate(2deg)}
+.polaroid figcaption{font:400 1rem Anton,sans-serif;letter-spacing:.1em;text-transform:uppercase;text-align:center;margin-top:.6rem}
+.polaroid video{display:block;width:100%;background:#f9dca3}
+.next{margin-top:1.4rem;padding:.9rem 1.1rem;border:2px dashed var(--ink);background:#fff8}
+.next b{font-family:Anton,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.team{display:grid;gap:1.6rem;grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.member{text-align:center}
+.member:nth-child(odd){transform:rotate(-1.2deg)}.member:nth-child(even){transform:rotate(1deg)}
+.ph{position:relative;aspect-ratio:4/5;background:#d9c4a1 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 100'%3E%3Ccircle cx='40' cy='38' r='15' fill='%23b9a27c'/%3E%3Cpath d='M10 100c0-24 13-36 30-36s30 12 30 36z' fill='%23b9a27c'/%3E%3C/svg%3E") center/70% no-repeat;border:1px solid var(--line)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.25) contrast(1.05)}
+.member h3{font:400 1.35rem Anton,sans-serif;letter-spacing:.06em;text-transform:uppercase;margin:.8rem 0 0}
+.role{color:var(--red);font:italic 700 1rem "DM Sans",serif;margin:0 0 .4rem}
+.member p:last-child{font-size:.95rem;margin:0}
+.evs{display:grid;gap:1.4rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.ev{background:var(--card);box-shadow:0 6px 18px #5a3d1a40;display:flex;flex-direction:column}
+.ev img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top;background:var(--line)}
+.evb{position:relative;padding:1rem 1rem 1.2rem;flex:1}
+.date{position:absolute;right:1rem;top:-2.2rem;background:var(--red);color:var(--card);text-align:center;width:3.6rem;padding:.3rem 0;border:2px solid var(--ink);font:400 .85rem/1 Anton,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.date b{display:block;font-size:1.7rem;line-height:1.1}
+.ev h3{font:400 1.3rem Anton,sans-serif;letter-spacing:.05em;text-transform:uppercase;margin:0 3.6rem .2rem 0}
+.ev p{margin:.2rem 0;font-size:.95rem}.ev .lieu{font-style:italic;opacity:.8}
+.ev.past img{filter:grayscale(.55) sepia(.3)}
+.ev.past .date{background:var(--ink)}
+.empty{padding:1.2rem;border:2px dashed var(--line);text-align:center}
+footer{background:var(--ink);color:var(--bg);text-align:center;padding:1.6rem 1rem;font-size:.9rem}
+footer img{width:56px;height:56px;border-radius:50%;margin-bottom:.4rem}
+footer a{color:var(--bg)}
+.btn{cursor:pointer}
+.btn.sm{font-size:.85rem;padding:.4rem .8rem;box-shadow:3px 3px 0 var(--ink)}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.5rem 0}
+#lvf,.o input:not([type=checkbox]),.o textarea,#p-organisateur input{font:inherit;padding:.45rem .6rem;border:1.5px solid var(--ink);border-radius:4px;background:#fff;color:var(--ink);max-width:100%}
+.o textarea{width:100%;min-height:70px}
+.noimg{aspect-ratio:4/5;display:grid;place-items:center;background:var(--line)}
+.noimg img{width:40%;aspect-ratio:1;border-radius:50%}
+.lbw{overflow-x:auto}
+.lb{width:100%;border-collapse:collapse;background:var(--card);box-shadow:0 6px 18px #5a3d1a40}
+.lb th{background:var(--ink);color:var(--bg);font:400 .9rem Anton,sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:.55rem .6rem;text-align:left}
+.lb td{padding:.55rem .6rem;border-bottom:1px dashed var(--line)}
+.lb td:first-child{font:400 1.3rem Anton,sans-serif;color:var(--red);width:3rem}
+.lb .pts{font:400 1.2rem Anton,sans-serif;text-align:right}
+.lb tr.top1 td{background:#f1d9a6}.lb tr.top2 td{background:#f6e7c7}.lb tr.top3 td{background:#f8efdc}
+.st{font-size:.9rem;opacity:.85}
+.oh{font:400 1.3rem Anton,sans-serif;letter-spacing:.06em;text-transform:uppercase;margin:0 0 .6rem;color:var(--red)}
+#orga .frame{margin-bottom:1.6rem}
+.oe{border:2px solid var(--ink);background:var(--card);padding:.8rem;margin:.9rem 0}
+.tag{font:400 .8rem Anton,sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:.15rem .6rem;border:2px solid var(--ink)}
+.tag.p{background:var(--ink);color:var(--bg)}.tag.u{background:var(--red);color:var(--card)}
+.mono{display:block;font-family:monospace;word-break:break-all;background:#fff;padding:.5rem;margin:.5rem 0}
+label.btn{display:inline-block}
+[hidden]{display:none!important}
+@media(max-width:560px){.stamp{display:none}nav a{padding:.7rem .6rem;font-size:.9rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+<header class="hero">
+<span class="top">★ Club de billard ★</span>
+<img class="logo" src="assets/logo.jpg" alt="Logo PoolNight">
+<h1>Pool<span>Night</span></h1>
+<p class="sub">EPITA Paris</p>
+<p class="slogan">Le billard, c’est meilleur à plusieurs.</p>
+</header>
+
+<nav aria-label="Navigation principale">
+<a id="t-presentation" href="#presentation">Présentation</a>
+<a id="t-bureau" href="#bureau">Le bureau</a>
+<a id="t-tournois" class="ext" href="https://pool-night.netlify.app">Tournois</a>
+<a id="t-evenements" href="#evenements">Évènements</a>
+<a id="t-classement" href="#classement">Classement</a>
+</nav>
+
+<main>
+<section id="p-presentation">
+<div class="rw"><h2 class="rib">L’association</h2></div>
+<div class="frame">
+<p class="lead">Des soirées, des tournois, et une queue de billard pour chacun.</p>
+<p>PoolNight est un club de billard installé au Kremlin-Bicêtre. On organise des soirées et des tournois pour jouer, se retrouver et passer un bon moment, quel que soit ton niveau.</p>
+<ul class="infos">
+<li><b>Où ?</b><br>After-works a EPITA et évènements 23 av. de Fontainebleau, 94270 Le Kremlin-Bicêtre</li>
+<li><b>Quand ?</b><br>Des soirées régulières, à retrouver dans l’onglet Évènements</li>
+</ul>
+</div>
+
+<div class="rw rwst">
+<div class="stamp" aria-hidden="true"><span><b>-35%</b></span>New Billard</div>
+<h2 class="rib">Devenir membre</h2>
+</div>
+<div class="grid">
+<div>
+<p class="lead">Rejoins le club, reçois ta carte.</p>
+<p>La carte de membre te donne ta place dans l’association et une réduction de 35% au New Billard. L’adhésion se fait en ligne, en quelques clics, depuis notre lien.</p>
+<div class="btns"><a class="btn" data-lt target="_blank" rel="noopener noreferrer">Devenir membre</a></div>
+</div>
+<figure class="polaroid tilt">
+<img src="assets/carte.gif" alt="Carte de membre PoolNight" style="width: 100%; max-width: 500px; height: auto;">
+<figcaption>Ta carte de membre</figcaption>
+</figure>
+</div>
+
+<div class="rw"><h2 class="rib">Participer à l’évènement</h2></div>
+<div class="frame">
+<p class="lead">Viens jouer avec nous.</p>
+<p>Les inscriptions aux soirées et aux tournois se font via notre lien. Un seul endroit pour tout retrouver.</p>
+<div class="next" id="next" hidden></div>
+<div class="btns">
+<a class="btn" data-lt target="_blank" rel="noopener noreferrer">S’inscrire</a>
+<a class="btn alt" href="https://pool-night.netlify.app">Voir les tournois</a>
+<a class="btn alt" data-insta target="_blank" rel="noopener noreferrer">Instagram</a>
+</div>
+</div>
+</section>
+
+<section id="p-bureau" hidden>
+<div class="rw"><h2 class="rib">Le bureau</h2></div>
+<div class="team" id="team"></div>
+</section>
+
+<section id="p-classement" hidden>
+<div class="rw"><h2 class="rib">Classement</h2></div>
+<div class="row"><label for="lvf">Niveau :</label><select id="lvf" onchange="renderBoard()"></select></div>
+<div class="lbw" id="lb"></div>
+<p class="st" id="lbn"></p>
+</section>
+
+<section id="p-organisateur" class="o" hidden>
+<div class="rw"><h2 class="rib">Organisateur</h2></div>
+<form id="login" class="frame" onsubmit="login(event)">
+<p class="lead">Espace réservé au bureau.</p>
+<div class="row"><input type="password" id="pw" placeholder="Mot de passe" autocomplete="current-password" aria-label="Mot de passe"><button class="btn" type="submit">Entrer</button></div>
+<p class="st" id="lerr" role="alert"></p>
+</form>
+<div id="orga" hidden></div>
+</section>
+
+<section id="p-evenements" hidden>
+<div class="rw"><h2 class="rib">À venir</h2></div>
+<div class="evs" id="up"></div>
+<div class="rw"><h2 class="rib">Évènements passés</h2></div>
+<div class="evs" id="past"></div>
+</section>
+</main>
+
+<footer>
+<img src="assets/logo.jpg" alt="">
+<p>PoolNight · Club de billard · 23 av. de Fontainebleau, 94270 Le Kremlin-Bicêtre<br>
+<a data-insta target="_blank" rel="noopener noreferrer">Instagram @clubpoolnight</a> · <a href="#organisateur">Espace organisateur</a></p>
+</footer>
+
+<script>
+/* ===== À MODIFIER ===== */
+const TOURNOI_URL='https://pool-night.netlify.app';   // page des tournois
+const LINKTREE='https://linktr.ee/clubpoolnight';                // lien du link-tree (vide = redirige vers Instagram)
+const INSTA='https://www.instagram.com/clubpoolnight?utm_source=ig_web_button_share_sheet&srtk=ZDNlZDc0MzIxNw==';
+const BUREAU=[
+ {n:'Prénom Nom',r:'Président·e',d:'Courte présentation : rôle dans le club, passion du billard, ce qu’il ou elle aime proposer.',img:'assets/bureau-1.jpg'},
+ {n:'Prénom Nom',r:'Vice-président·e',d:'Courte présentation : rôle dans le club, passion du billard, ce qu’il ou elle aime proposer.',img:'assets/bureau-2.jpg'},
+ {n:'Prénom Nom',r:'Trésorier·ère',d:'Courte présentation : rôle dans le club, passion du billard, ce qu’il ou elle aime proposer.',img:'assets/bureau-3.jpg'},
+ {n:'Prénom Nom',r:'Secrétaire',d:'Courte présentation : rôle dans le club, passion du billard, ce qu’il ou elle aime proposer.',img:'assets/bureau-4.jpg'}
+];
+const DEFAULT_EVENTS=[ /* date au format AAAA-MM-JJ. Une fois l'espace organisateur utilisé, c'est data.json qui fait foi. */
+ {id:'e0',d:'2026-10-31',t:'Halloween Night',l:'',x:'Soirée billard spéciale Halloween.',img:'assets/ev-halloween.jpg'},
+ {id:'e1',d:'2026-10-28',t:'Soirée PoolNight',l:'23 av. de Fontainebleau, 94270 Le Kremlin-Bicêtre',x:'Une soirée billard entre amis. Merci à tous ceux qui sont venus !',img:'assets/ev-28-octobre.jpg'},
+ {id:'e2',d:'2026-10-14',t:'Soirée PoolNight',l:'',x:'Retour en images sur la soirée du 14 octobre.',img:'assets/ev-14-octobre.jpg'}
+];
+/* Espace organisateur : empreinte SHA-256 du mot de passe (mot de passe provisoire : billard2026).
+   Génère la tienne depuis l'espace organisateur, section « Mot de passe ». */
+const ORGA_HASH='c9e5effe6c0dd09cfd99d1f9a3abac12c9edd4879abaab50671ea37a59d7c121';
+const POINTS={part:1,win:2,champ:5,final:3}; /* barème du classement */
+const DATA_PATH='data.json';
+/* ====================== */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+document.querySelectorAll('[data-lt]').forEach(a=>a.href=LINKTREE||INSTA);
+document.querySelectorAll('[data-insta]').forEach(a=>a.href=INSTA);
+$('t-tournois').href=TOURNOI_URL;
+document.querySelectorAll('a[href="https://pool-night.netlify.app"]').forEach(a=>a.href=TOURNOI_URL);
+
+$('team').innerHTML=BUREAU.map(m=>`<article class="polaroid member"><div class="ph"><img src="${esc(m.img)}" alt="Photo de ${esc(m.n)}" loading="lazy" onerror="this.remove()"></div><h3>${esc(m.n)}</h3><p class="role">${esc(m.r)}</p><p>${esc(m.d)}</p></article>`).join('');
+
+const norm=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const day=s=>{const [y,m,d]=(s||iso(new Date())).split('-').map(Number);return new Date(y,m-1,d)};
+const t0=new Date();t0.setHours(0,0,0,0);
+const ss=k=>{try{return sessionStorage.getItem(k)}catch(e){return null}};
+let D={events:DEFAULT_EVENTS.map(e=>({...e})),results:[]};
+let dirty=false,GH={owner:'',repo:'',branch:'main',token:'',auto:false},pubBusy=false,pubAgain=false,pubTimer;
+try{Object.assign(GH,JSON.parse(localStorage.getItem('pn_gh')))}catch(e){}
+
+/* ---------- évènements ---------- */
+const isPast=e=>e.p==='past'||(e.p!=='up'&&day(e.d)<t0);
+function noimg(el){el.outerHTML='<div class="noimg"><img src="assets/logo.jpg" alt=""></div>'}
+const card=(e,past)=>{const d=day(e.d);
+ return `<article class="ev${past?' past':''}">${e.img?`<img src="${esc(e.img)}" alt="Affiche : ${esc(e.t)}" loading="lazy" onerror="noimg(this)">`:'<div class="noimg"><img src="assets/logo.jpg" alt=""></div>'}<div class="evb"><div class="date"><b>${d.getDate()}</b>${d.toLocaleDateString('fr-FR',{month:'short'}).replace('.','')}</div><h3>${esc(e.t)}</h3>${e.l?`<p class="lieu">${esc(e.l)}</p>`:''}<p>${esc(e.x)}</p></div></article>`};
+function renderEvents(){
+ const up=D.events.filter(e=>!isPast(e)).sort((a,b)=>day(a.d)-day(b.d)),past=D.events.filter(isPast).sort((a,b)=>day(b.d)-day(a.d));
+ $('up').innerHTML=up.length?up.map(e=>card(e,false)).join(''):'<div class="empty">Pas d’évènement annoncé pour le moment. Suis-nous sur Instagram pour les prochaines dates !</div>';
+ $('past').innerHTML=past.length?past.map(e=>card(e,true)).join(''):'<div class="empty">Aucun évènement passé.</div>';
+ const n=$('next');
+ if(up.length){n.hidden=false;n.innerHTML=`Prochain rendez-vous : <b>${esc(up[0].t)}</b>, le ${day(up[0].d).toLocaleDateString('fr-FR',{day:'numeric',month:'long'})}.`}else n.hidden=true;
+}
+
+/* ---------- classement ---------- */
+const real=i=>i&&i!=='-';
+function podium(b){
+ if(b.type==='de'){const [gf,rs]=b.secs[2].rounds.map(r=>r[0]);if(!real(gf.w))return[null,null];const m=gf.w===gf.a?gf:rs;return real(m.w)?[m.w,m.w===m.a?m.b:m.a]:[null,null]}
+ const R=b.secs[0].rounds,f=R[R.length-1][0];return real(f.w)?[f.w,f.w===f.a?f.b:f.a]:[null,null];
+}
+function scoreTournoi(t){
+ if(!t||!Array.isArray(t.players)||!Array.isArray(t.brackets)||!t.brackets.length||t.brackets.some(b=>!b.secs))throw new Error('Format non reconnu : exporte tournoi.json depuis la dernière version de la page tournois, avec un tableau généré.');
+ const P={},R={};let open=0;t.players.forEach(p=>P[p.id]=p);
+ const get=id=>R[id]||(R[id]={p:P[id].p,n:P[id].n,l:P[id].l,v:0,c:0,f:0});
+ t.brackets.forEach(b=>{
+  const ms=[];(b.groups||[]).forEach(g=>g.ms.forEach(m=>ms.push(m)));b.secs.forEach(s=>s.rounds.forEach(r=>r.forEach(m=>ms.push(m))));
+  ms.forEach(m=>{[m.a,m.b].forEach(i=>{if(real(i)&&P[i])get(i)});if(real(m.a)&&real(m.b)&&real(m.w)&&P[m.w])get(m.w).v++});
+  const [c,f]=podium(b);if(c&&P[c]){get(c).c++;if(f&&P[f])get(f).f++}else open++;
+ });
+ return {rows:Object.values(R),open};
+}
+function board(lv){
+ const M={};
+ [...D.results].sort((a,b)=>a.date<b.date?-1:1).forEach(t=>t.rows.forEach(r=>{
+  const k=norm(r.p+' '+r.n).split(/\s+/).sort().join(' '),x=M[k]||(M[k]={p:r.p,n:r.n,l:r.l,t:0,v:0,c:0,f:0});
+  x.l=r.l||x.l;x.t++;x.v+=r.v;x.c+=r.c;x.f+=r.f}));
+ return Object.values(M).map(x=>({...x,pts:x.t*POINTS.part+x.v*POINTS.win+x.c*POINTS.champ+x.f*POINTS.final})).filter(x=>!lv||x.l===lv)
+  .sort((a,b)=>b.pts-a.pts||b.c-a.c||b.v-a.v||(a.n+a.p).localeCompare(b.n+b.p));
+}
+function renderBoard(){
+ const sel=$('lvf'),cur=sel.value,lvs=[...new Set(D.results.flatMap(t=>t.rows.map(r=>r.l)).filter(Boolean))];
+ sel.innerHTML='<option value="">Tous les niveaux</option>'+lvs.map(l=>`<option${l===cur?' selected':''}>${esc(l)}</option>`).join('');
+ const rows=board(sel.value);let rk=0;
+ $('lb').innerHTML=rows.length?`<table class="lb"><tr><th>#</th><th>Joueur</th><th>Niveau</th><th>Tournois</th><th>Victoires</th><th>Titres</th><th class="pts">Points</th></tr>${rows.map((x,i)=>{if(!i||x.pts!==rows[i-1].pts)rk=i+1;
+  return `<tr class="${rk<4?'top'+rk:''}"><td>${rk}</td><td>${esc(x.p)} ${esc(x.n)}</td><td>${esc(x.l||'')}</td><td>${x.t}</td><td>${x.v}</td><td>${x.c}</td><td class="pts">${x.pts}</td></tr>`}).join('')}</table>`
+  :'<div class="empty">Le classement apparaîtra après le premier tournoi terminé.</div>';
+ $('lbn').textContent=`Barème : ${POINTS.part} pt par tournoi joué, ${POINTS.win} par victoire, +${POINTS.champ} pour un titre, +${POINTS.final} pour une finale perdue.`;
+}
+
+/* ---------- espace organisateur ---------- */
+async function sha(s){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,'0')).join('')}
+async function login(ev){
+ ev.preventDefault();
+ try{
+  if(await sha($('pw').value)===ORGA_HASH){try{sessionStorage.setItem('pn_orga','1')}catch(e){}$('pw').value='';$('lerr').textContent='';show()}
+  else $('lerr').textContent='Mot de passe incorrect.';
+ }catch(e){$('lerr').textContent='Connexion impossible : ouvre le site en https (ou en local avec un serveur).'}
+}
+function logout(){try{sessionStorage.removeItem('pn_orga')}catch(e){}show()}
+const st=t=>{const s=$('ost');if(s)s.textContent=t};
+function touch(){
+ dirty=true;st('Modifications non publiées.');clearTimeout(pubTimer);
+ if(GH.auto&&GH.token)pubTimer=setTimeout(publish,1500);
+}
+const ev=id=>D.events.find(e=>e.id===id);
+function evSet(id,k,v){ev(id)[k]=v;touch();renderEvents()}
+function evAdd(){D.events.push({id:'e'+Date.now(),d:iso(new Date()),t:'Nouvel évènement',l:'',x:'',img:''});touch();renderEvents();renderOrga()}
+function evDel(id){if(confirm('Supprimer cet évènement ?')){D.events=D.events.filter(e=>e.id!==id);touch();renderEvents();renderOrga()}}
+function evMove(id){const e=ev(id);e.p=isPast(e)?'up':'past';touch();renderEvents();renderOrga()}
+const ghOk=()=>GH.token&&GH.owner&&GH.repo;
+function ghSave(){
+ GH={owner:$('go').value.trim(),repo:$('gr').value.trim(),branch:$('gb').value.trim()||'main',token:$('gt').value.trim(),auto:$('ga').checked};
+ try{localStorage.setItem('pn_gh',JSON.stringify(GH))}catch(e){}
+}
+async function ghPut(path,b64,msg){
+ const url=`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${path}`,h={Authorization:'Bearer '+GH.token,Accept:'application/vnd.github+json'};
+ const g=await fetch(url+'?ref='+encodeURIComponent(GH.branch),{headers:h,cache:'no-store'});
+ const body={message:msg,branch:GH.branch,content:b64};if(g.ok)body.sha=(await g.json()).sha;
+ const r=await fetch(url,{method:'PUT',headers:h,body:JSON.stringify(body)});if(!r.ok)throw new Error('code '+r.status);
+}
+async function publish(){
+ if(!ghOk())return st('Renseigne utilisateur, dépôt et jeton GitHub.');
+ if(pubBusy){pubAgain=true;return}
+ pubBusy=true;st('Publication en cours…');
+ try{await ghPut(DATA_PATH,btoa(unescape(encodeURIComponent(JSON.stringify(D,null,1)))),'Mise à jour du site');dirty=false;st('Publié à '+new Date().toLocaleTimeString('fr-FR')+'. En ligne dans 1 à 2 minutes.')}
+ catch(e){st('Échec de la publication ('+e.message+'). Vérifie le jeton, le dépôt et la branche.')}
+ pubBusy=false;if(pubAgain){pubAgain=false;publish()}
+}
+async function upImg(id,input){
+ const f=input.files[0];if(!f)return;if(!ghOk())return st('Configure d’abord la publication GitHub pour téléverser une affiche.');
+ try{
+  st('Téléversement de l’affiche…');
+  const bm=await createImageBitmap(f),s=Math.min(1,900/bm.width),c=document.createElement('canvas');
+  c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
+  const path='assets/ev-'+Date.now()+'.jpg';
+  await ghPut(path,c.toDataURL('image/jpeg',.85).split(',')[1],'Affiche d’évènement');
+  evSet(id,'img',path);renderOrga();st('Affiche téléversée. Elle s’affichera après le déploiement du site.');
+ }catch(e){st('Échec du téléversement ('+e.message+').')}
+}
+function exportData(){
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(D,null,1)],{type:'application/json'}));a.download='data.json';a.click();
+}
+function addResult(t){
+ let r;try{r=scoreTournoi(t)}catch(e){return alert(e.message)}
+ if(r.open&&!confirm(r.open+' tableau(x) sans vainqueur (tournoi non terminé ?). Importer quand même ?'))return;
+ const name=$('rn').value.trim()||'Tournoi',date=$('rd').value||iso(new Date()),id=name+'|'+date;
+ D.results=D.results.filter(x=>x.id!==id);D.results.push({id,name,date,rows:r.rows});
+ touch();renderBoard();renderOrga();
+}
+function importFile(i){const f=i.files[0];if(f)f.text().then(x=>addResult(JSON.parse(x))).catch(()=>alert('Fichier illisible.'))}
+async function importRemote(){
+ try{addResult(await (await fetch(new URL('tournoi.json',TOURNOI_URL.replace(/\/?$/,'/')))).json())}
+ catch(e){alert('Lecture impossible depuis le site des tournois (blocage du navigateur). Exporte tournoi.json depuis la page tournois et charge-le avec « Importer un fichier ».')}
+}
+function resDel(i){if(confirm('Retirer ce tournoi du classement ?')){D.results.splice(i,1);touch();renderBoard();renderOrga()}}
+async function makeHash(){try{$('hout').textContent=await sha($('npw').value)}catch(e){$('hout').textContent='Indisponible hors https.'}}
+function renderOrga(){
+ const e2=e=>{const p=isPast(e);return `<div class="oe"><div class="row"><input type="date" value="${esc(e.d)}" oninput="evSet('${e.id}','d',this.value)" aria-label="Date"><input value="${esc(e.t)}" placeholder="Titre" oninput="evSet('${e.id}','t',this.value)" aria-label="Titre"><input value="${esc(e.l)}" placeholder="Lieu" oninput="evSet('${e.id}','l',this.value)" aria-label="Lieu"></div>
+<textarea placeholder="Description" oninput="evSet('${e.id}','x',this.value)" aria-label="Description">${esc(e.x)}</textarea>
+<div class="row"><input value="${esc(e.img||'')}" placeholder="assets/affiche.jpg" oninput="evSet('${e.id}','img',this.value)" aria-label="Chemin de l’affiche"><label class="btn alt sm">Téléverser une affiche<input type="file" accept="image/*" hidden onchange="upImg('${e.id}',this)"></label></div>
+<div class="row"><span class="tag ${p?'p':'u'}">${p?'Passé':'À venir'}</span><button class="btn alt sm" onclick="evMove('${e.id}')">${p?'Remettre à venir':'Passer en évènement passé'}</button><button class="btn sm" onclick="evDel('${e.id}')">Supprimer</button></div></div>`};
+ $('orga').innerHTML=`<div class="frame"><h3 class="oh">Évènements</h3><button class="btn" onclick="evAdd()">Ajouter un évènement</button>${[...D.events].sort((a,b)=>day(b.d)-day(a.d)).map(e2).join('')}</div>
+<div class="frame"><h3 class="oh">Classement</h3><p class="st">Après chaque tournoi, exporte tournoi.json depuis la page tournois, puis importe-le ici pour mettre à jour le classement.</p>
+<div class="row"><input id="rn" placeholder="Nom du tournoi" aria-label="Nom du tournoi"><input id="rd" type="date" value="${iso(new Date())}" aria-label="Date du tournoi"></div>
+<div class="row"><label class="btn alt sm">Importer un fichier<input type="file" accept=".json" hidden onchange="importFile(this)"></label><button class="btn alt sm" onclick="importRemote()">Importer depuis le site tournois</button></div>
+${D.results.map((t,i)=>`<div class="row"><span>${esc(t.name)} · ${day(t.date).toLocaleDateString('fr-FR')} · ${t.rows.length} joueurs</span><button class="btn sm" onclick="resDel(${i})">Retirer</button></div>`).join('')||'<p class="st">Aucun tournoi importé.</p>'}</div>
+<div class="frame"><h3 class="oh">Publication</h3><p class="st">Les changements ne sont visibles du public qu’une fois publiés sur GitHub. Le jeton reste dans ce navigateur (Contents : Read and write, dépôt du site uniquement).</p>
+<div class="row"><input id="go" placeholder="Utilisateur GitHub" value="${esc(GH.owner)}" aria-label="Utilisateur GitHub"><input id="gr" placeholder="Dépôt" value="${esc(GH.repo)}" aria-label="Dépôt"><input id="gb" placeholder="Branche" value="${esc(GH.branch)}" aria-label="Branche"></div>
+<div class="row"><input id="gt" type="password" placeholder="Jeton d’accès" value="${esc(GH.token)}" aria-label="Jeton d’accès"><label><input type="checkbox" id="ga"${GH.auto?' checked':''}> Publier automatiquement</label></div>
+<div class="row"><button class="btn" onclick="ghSave();publish()">Enregistrer et publier</button><button class="btn alt sm" onclick="exportData()">Exporter data.json</button></div>
+<p class="st" id="ost" role="status">${dirty?'Modifications non publiées.':''}</p></div>
+<div class="frame"><h3 class="oh">Mot de passe</h3><p class="st">Saisis un nouveau mot de passe, copie l’empreinte obtenue dans la constante ORGA_HASH de poolnight.html, puis republie le site.</p>
+<div class="row"><input id="npw" type="text" placeholder="Nouveau mot de passe" aria-label="Nouveau mot de passe"><button class="btn alt sm" onclick="makeHash()">Générer l’empreinte</button></div><code class="mono" id="hout"></code>
+<div class="row"><button class="btn sm" onclick="logout()">Se déconnecter</button></div></div>`;
+}
+
+const TABS=['presentation','bureau','evenements','classement','organisateur'];
+function show(){
+ const h=location.hash.slice(1),t=TABS.includes(h)?h:'presentation';
+ TABS.forEach(n=>{$('p-'+n).hidden=n!==t;const a=$('t-'+n);if(a)n===t?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});
+ if(t==='organisateur'){const ok=ss('pn_orga')==='1';$('login').hidden=ok;$('orga').hidden=!ok;if(ok)renderOrga()}
+}
+addEventListener('hashchange',show);
+addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+renderEvents();renderBoard();show();
+fetch(DATA_PATH+'?'+Date.now()).then(r=>r.ok?r.json():null).then(j=>{if(j&&Array.isArray(j.events)&&!dirty){D={events:j.events,results:j.results||[]};renderEvents();renderBoard();if(location.hash==='#organisateur'&&ss('pn_orga')==='1')renderOrga()}}).catch(()=>{});
+const v=document.querySelector('video');
+if(v&&matchMedia('(prefers-reduced-motion: reduce)').matches){v.pause();v.removeAttribute('autoplay')}
+</script>
+</body>
+</html>
