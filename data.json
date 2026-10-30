@@ -1,0 +1,22 @@
+{
+ "events": [
+  {
+   "id": "e0",
+   "d": "2026-10-28",
+   "t": "Halloween Night",
+   "l": "23 av Fontainebleau Kremlin Bicêtre",
+   "x": "Soirée billard spéciale Halloween.",
+   "img": "assets/ev-halloween.jpg",
+   "p": "past"
+  },
+  {
+   "id": "e2",
+   "d": "2026-10-14",
+   "t": "Soirée PoolNight",
+   "l": "",
+   "x": "Retour en images sur la soirée du 14 octobre.",
+   "img": "assets/ev-14-octobre.jpg"
+  }
+ ],
+ "results": []
+}
